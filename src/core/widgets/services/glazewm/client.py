@@ -45,6 +45,28 @@ class BindingMode:
     display_name: str
 
 
+@dataclass
+class StackWindow:
+    id: str
+    title: str
+    process_name: str
+    has_focus: bool
+
+
+@dataclass
+class Stack:
+    id: str
+    device_name: str | None
+    windows: list[StackWindow] = field(default_factory=list)
+
+
+@dataclass
+class FocusedContainer:
+    id: str | None
+    parent_id: str | None
+    type: str
+
+
 class MessageType(StrEnum):
     EVENT_SUBSCRIPTION = auto()
     CLIENT_RESPONSE = auto()
@@ -56,6 +78,11 @@ class QueryType(StrEnum):
     BINDING_MODES = "query binding-modes"
 
 
+class EventType(StrEnum):
+    STACK_FOCUS_CHANGED = "stack_focus_changed"
+    FOCUS_CHANGED = "focus_changed"
+
+
 class TilingDirection(StrEnum):
     HORIZONTAL = auto()
     VERTICAL = auto()
@@ -65,6 +92,8 @@ class GlazewmClient(QObject):
     workspaces_data_processed = pyqtSignal(list)
     tiling_direction_processed = pyqtSignal(TilingDirection)
     binding_mode_changed = pyqtSignal(BindingMode)
+    stack_focus_processed = pyqtSignal(object)
+    focus_changed_processed = pyqtSignal(object)
     glazewm_connection_status = pyqtSignal(bool)
 
     def __init__(
@@ -72,9 +101,14 @@ class GlazewmClient(QObject):
         uri: str,
         initial_messages: list[str] | None = None,
         reconnect_interval: int = 4000,
+        refresh_on_event: bool = True,
     ):
         super().__init__()
         self.initial_messages = initial_messages if initial_messages else []
+        # When True, every subscribed event triggers a coarse re-query of
+        # monitors/tiling-direction/binding-modes. Consumers that parse event
+        # payloads directly (e.g. the stack widget) can disable this.
+        self._refresh_on_event = refresh_on_event
 
         self._uri = QUrl(uri)
         self._websocket = QWebSocket()
@@ -98,6 +132,9 @@ class GlazewmClient(QObject):
 
     def enable_binding_mode(self, binding_mode_name: str):
         self._websocket.sendTextMessage(f"command wm-enable-binding-mode --name {binding_mode_name}")
+
+    def focus_container(self, container_id: str):
+        self._websocket.sendTextMessage(f"command focus --container-id {container_id}")
 
     def focus_next_workspace(self):
         self._websocket.sendTextMessage("command focus --next-active-workspace-on-monitor")
@@ -142,9 +179,7 @@ class GlazewmClient(QObject):
             return
 
         if response.get("messageType") == MessageType.EVENT_SUBSCRIPTION:
-            self._websocket.sendTextMessage(QueryType.MONITORS)
-            self._websocket.sendTextMessage(QueryType.TILING_DIRECTION)
-            self._websocket.sendTextMessage(QueryType.BINDING_MODES)
+            self._handle_event(response.get("data"))
         elif response.get("messageType") == MessageType.CLIENT_RESPONSE:
             raw_data: Any = response.get("data")
             if not isinstance(raw_data, dict):
@@ -166,6 +201,76 @@ class GlazewmClient(QObject):
                     logger.warning("Expected 'bindingModes' to be a list, got %s", type(binding_modes).__name__)
                     return
                 self.binding_mode_changed.emit(self._process_binding_modes(binding_modes))
+
+    def _handle_event(self, data: Any):
+        """Dispatches a subscribed WM event to the appropriate handler.
+
+        Stack focus events carry their full payload, so they are parsed and
+        emitted directly. Focus changes are parsed and emitted as well. Unless
+        `refresh_on_event` is disabled, non-stack events also trigger a coarse
+        re-query of monitor/tiling/binding state (the original refresh scheme).
+        """
+        event_type = data.get("eventType") if isinstance(data, dict) else None
+
+        if event_type == EventType.STACK_FOCUS_CHANGED:
+            stack = self._process_stack(data.get("stackContainer"))
+            if stack is not None:
+                self.stack_focus_processed.emit(stack)
+            return
+
+        if event_type == EventType.FOCUS_CHANGED:
+            focused = self._process_focus(data.get("focusedContainer"))
+            if focused is not None:
+                self.focus_changed_processed.emit(focused)
+
+        if self._refresh_on_event:
+            self._websocket.sendTextMessage(QueryType.MONITORS)
+            self._websocket.sendTextMessage(QueryType.TILING_DIRECTION)
+            self._websocket.sendTextMessage(QueryType.BINDING_MODES)
+
+    def _process_stack(self, data: Any) -> Stack | None:
+        """Parses a `stackContainer` event payload into a `Stack`."""
+        if not isinstance(data, dict):
+            logger.warning("Expected 'stackContainer' to be a dict, got %s", type(data).__name__)
+            return None
+        stack_id: str | None = data.get("id")
+        if not stack_id:
+            logger.warning("Stack container is missing an id")
+            return None
+        return Stack(
+            id=stack_id,
+            device_name=data.get("deviceName"),
+            windows=self._read_stack_windows(data),
+        )
+
+    def _read_stack_windows(self, parent: dict[str, Any]) -> list[StackWindow]:
+        """Collects the window descendants of a stack container in order."""
+        windows: list[StackWindow] = []
+        for child in parent.get("children", []):
+            child_type = child.get("type")
+            if child_type == "window":
+                windows.append(
+                    StackWindow(
+                        id=child.get("id", ""),
+                        title=child.get("title", ""),
+                        process_name=child.get("processName", ""),
+                        has_focus=child.get("hasFocus", False),
+                    )
+                )
+            elif child_type == "split":
+                windows.extend(self._read_stack_windows(child))
+        return windows
+
+    def _process_focus(self, data: Any) -> FocusedContainer | None:
+        """Parses a `focusedContainer` event payload into a `FocusedContainer`."""
+        if not isinstance(data, dict):
+            logger.warning("Expected 'focusedContainer' to be a dict, got %s", type(data).__name__)
+            return None
+        return FocusedContainer(
+            id=data.get("id"),
+            parent_id=data.get("parentId"),
+            type=data.get("type", ""),
+        )
 
     def _process_workspaces(self, data: list[dict[str, Any]]) -> list[Monitor]:
         monitors: list[Monitor] = []
