@@ -87,6 +87,7 @@ class GlazewmWorkspaceButton(QPushButton):
         replacements = {
             "name": str(self.workspace_name or ""),
             "display_name": str(self.display_name or ""),
+            "full_name": f"{self.workspace_name}:{self.display_name}" if self.display_name else self.workspace_name
         }
         # Label priority: YASB config -> display_name from GlazeWM -> name from GlazeWM
         populated_label = self.config.populated_label or self.display_name or self.workspace_name
@@ -188,6 +189,7 @@ class GlazewmWorkspaceButtonWithIcons(QFrame):
         replacements = {
             "name": str(self.workspace_name or ""),
             "display_name": str(self.display_name or ""),
+            "full_name": f"{self.workspace_name}:{self.display_name}" if self.display_name else self.workspace_name
         }
         # Label priority: YASB config -> display_name from GlazeWM -> name from GlazeWM
         populated_label = self.config.populated_label or self.display_name or self.workspace_name
