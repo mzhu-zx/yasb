@@ -364,26 +364,6 @@ BASE_WIDGET_STYLE: str = """\
     background-color: var(--yasb-white-alpha-10);
 }"""
 
-KOMOREBI_WIDGET_STYLE: str = """\
-/* Komorebi Workspace */
-.komorebi-workspaces .ws-btn {
-    color: var(--yasb-fg);
-    border: none;
-    margin: 0 2px;
-    padding: 2px 8px;
-    outline: none;
-    font-family: var(--system-font);
-    font-weight: 600;
-    border-radius: 3px;
-}
-.komorebi-workspaces .ws-btn.populated {
-    background-color: var(--yasb-surface-alt);
-}
-.komorebi-workspaces .ws-btn.active {
-    color: var(--yasb-accent-fg);
-    background-color: var(--yasb-accent);
-}"""
-
 GLAZEWM_WIDGET_STYLE: str = """\
 /* Glaze Workspace */
 .glazewm-workspaces .ws-btn {
@@ -1363,7 +1343,6 @@ MEDIA_WIDGET_STYLE: str = """\
 
 WIDGET_STYLES: dict[str, str] = {
     "base": BASE_WIDGET_STYLE,
-    "komorebi": KOMOREBI_WIDGET_STYLE,
     "glazewm": GLAZEWM_WIDGET_STYLE,
     "windows_desktops": WINDOWS_DESKTOPS_WIDGET_STYLE,
     "cpu": CPU_WIDGET_STYLE,

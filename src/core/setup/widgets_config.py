@@ -133,28 +133,6 @@ BASE_WIDGET: dict = {
     },
 }
 
-KOMOREBI_WIDGET: dict = {
-    "komorebi": {
-        "placement": {
-            "komorebi_workspaces": ("left", 20),
-        },
-        "config": {
-            "komorebi_workspaces": {
-                "type": "komorebi.workspaces.WorkspaceWidget",
-                "options": {
-                    "label_workspace_btn": "{name}",
-                    "label_workspace_active_btn": "{name}",
-                    "label_workspace_populated_btn": "{name}",
-                    "label_default_name": "{index}",
-                    "label_zero_index": False,
-                    "hide_empty_workspaces": False,
-                    "hide_if_offline": True,
-                },
-            },
-        },
-    },
-}
-
 GLAZEWM_WIDGET: dict = {
     "glazewm": {
         "placement": {
@@ -566,7 +544,6 @@ MEDIA_WIDGET: dict = {
 
 WIDGETS_CONFIG: dict[str, dict] = {
     **BASE_WIDGET,
-    **KOMOREBI_WIDGET,
     **GLAZEWM_WIDGET,
     **WINDOWS_DESKTOPS_WIDGET,
     **CPU_WIDGET,

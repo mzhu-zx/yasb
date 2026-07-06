@@ -1,263 +1,5 @@
 {
   "$defs": {
-    "ActiveLayoutCallbacksConfig": {
-      "additionalProperties": false,
-      "properties": {
-        "on_left": {
-          "default": "next_layout",
-          "title": "On Left",
-          "type": "string"
-        },
-        "on_middle": {
-          "default": "toggle_monocle",
-          "title": "On Middle",
-          "type": "string"
-        },
-        "on_right": {
-          "default": "prev_layout",
-          "title": "On Right",
-          "type": "string"
-        }
-      },
-      "title": "ActiveLayoutCallbacksConfig",
-      "type": "object"
-    },
-    "ActiveLayoutConfig": {
-      "additionalProperties": false,
-      "properties": {
-        "hide_if_offline": {
-          "default": false,
-          "title": "Hide If Offline",
-          "type": "boolean"
-        },
-        "label": {
-          "default": "{icon}",
-          "title": "Label",
-          "type": "string"
-        },
-        "layouts": {
-          "default": [
-            "bsp",
-            "columns",
-            "rows",
-            "grid",
-            "scrolling",
-            "vertical_stack",
-            "horizontal_stack",
-            "ultrawide_vertical_stack",
-            "right_main_vertical_stack",
-            "monocle",
-            "maximized",
-            "floating",
-            "paused",
-            "tiling"
-          ],
-          "items": {
-            "type": "string"
-          },
-          "title": "Layouts",
-          "type": "array"
-        },
-        "layout_icons": {
-          "$ref": "#/$defs/ActiveLayoutIconsConfig",
-          "default": {
-            "bsp": "[\\]",
-            "columns": "[||]",
-            "rows": "[==]",
-            "grid": "[G]",
-            "scrolling": "[SC]",
-            "vertical_stack": "[V]=",
-            "horizontal_stack": "[H]=",
-            "ultrawide_vertical_stack": "||=",
-            "right_main_vertical_stack": "=||",
-            "monocle": "[M]",
-            "maximized": "[X]",
-            "floating": "><>",
-            "paused": "[P]",
-            "tiling": "[T]"
-          }
-        },
-        "layout_menu": {
-          "$ref": "#/$defs/ActiveLayoutMenuConfig",
-          "default": {
-            "blur": true,
-            "round_corners": true,
-            "round_corners_type": "normal",
-            "border_color": "System",
-            "alignment": "left",
-            "direction": "down",
-            "offset_top": 6,
-            "offset_left": 0,
-            "show_layout_icons": true
-          }
-        },
-        "keybindings": {
-          "default": [],
-          "items": {
-            "$ref": "#/$defs/KeybindingConfig"
-          },
-          "title": "Keybindings",
-          "type": "array"
-        },
-        "callbacks": {
-          "$ref": "#/$defs/ActiveLayoutCallbacksConfig",
-          "default": {
-            "on_left": "next_layout",
-            "on_middle": "toggle_monocle",
-            "on_right": "prev_layout"
-          }
-        }
-      },
-      "title": "ActiveLayoutConfig",
-      "type": "object"
-    },
-    "ActiveLayoutEntry": {
-      "properties": {
-        "type": {
-          "const": "komorebi.active_layout.ActiveLayoutWidget",
-          "title": "Type",
-          "type": "string"
-        },
-        "options": {
-          "$ref": "#/$defs/ActiveLayoutConfig"
-        }
-      },
-      "required": [
-        "type",
-        "options"
-      ],
-      "title": "ActiveLayoutEntry",
-      "type": "object"
-    },
-    "ActiveLayoutIconsConfig": {
-      "additionalProperties": false,
-      "properties": {
-        "bsp": {
-          "default": "[\\]",
-          "title": "Bsp",
-          "type": "string"
-        },
-        "columns": {
-          "default": "[||]",
-          "title": "Columns",
-          "type": "string"
-        },
-        "rows": {
-          "default": "[==]",
-          "title": "Rows",
-          "type": "string"
-        },
-        "grid": {
-          "default": "[G]",
-          "title": "Grid",
-          "type": "string"
-        },
-        "scrolling": {
-          "default": "[SC]",
-          "title": "Scrolling",
-          "type": "string"
-        },
-        "vertical_stack": {
-          "default": "[V]=",
-          "title": "Vertical Stack",
-          "type": "string"
-        },
-        "horizontal_stack": {
-          "default": "[H]=",
-          "title": "Horizontal Stack",
-          "type": "string"
-        },
-        "ultrawide_vertical_stack": {
-          "default": "||=",
-          "title": "Ultrawide Vertical Stack",
-          "type": "string"
-        },
-        "right_main_vertical_stack": {
-          "default": "=||",
-          "title": "Right Main Vertical Stack",
-          "type": "string"
-        },
-        "monocle": {
-          "default": "[M]",
-          "title": "Monocle",
-          "type": "string"
-        },
-        "maximized": {
-          "default": "[X]",
-          "title": "Maximized",
-          "type": "string"
-        },
-        "floating": {
-          "default": "><>",
-          "title": "Floating",
-          "type": "string"
-        },
-        "paused": {
-          "default": "[P]",
-          "title": "Paused",
-          "type": "string"
-        },
-        "tiling": {
-          "default": "[T]",
-          "title": "Tiling",
-          "type": "string"
-        }
-      },
-      "title": "ActiveLayoutIconsConfig",
-      "type": "object"
-    },
-    "ActiveLayoutMenuConfig": {
-      "additionalProperties": false,
-      "properties": {
-        "blur": {
-          "default": true,
-          "title": "Blur",
-          "type": "boolean"
-        },
-        "round_corners": {
-          "default": true,
-          "title": "Round Corners",
-          "type": "boolean"
-        },
-        "round_corners_type": {
-          "default": "normal",
-          "title": "Round Corners Type",
-          "type": "string"
-        },
-        "border_color": {
-          "default": "System",
-          "title": "Border Color",
-          "type": "string"
-        },
-        "alignment": {
-          "default": "left",
-          "title": "Alignment",
-          "type": "string"
-        },
-        "direction": {
-          "default": "down",
-          "title": "Direction",
-          "type": "string"
-        },
-        "offset_top": {
-          "default": 6,
-          "title": "Offset Top",
-          "type": "integer"
-        },
-        "offset_left": {
-          "default": 0,
-          "title": "Offset Left",
-          "type": "integer"
-        },
-        "show_layout_icons": {
-          "default": true,
-          "title": "Show Layout Icons",
-          "type": "boolean"
-        }
-      },
-      "title": "ActiveLayoutMenuConfig",
-      "type": "object"
-    },
     "ActiveWindowCallbacksConfig": {
       "additionalProperties": false,
       "properties": {
@@ -395,141 +137,6 @@
         "options"
       ],
       "title": "ActiveWindowEntry",
-      "type": "object"
-    },
-    "AiChatCallbacksConfig": {
-      "additionalProperties": false,
-      "properties": {
-        "on_left": {
-          "default": "toggle_chat",
-          "enum": [
-            "toggle_chat",
-            "do_nothing"
-          ],
-          "title": "On Left",
-          "type": "string"
-        },
-        "on_middle": {
-          "default": "do_nothing",
-          "enum": [
-            "toggle_chat",
-            "do_nothing"
-          ],
-          "title": "On Middle",
-          "type": "string"
-        },
-        "on_right": {
-          "default": "do_nothing",
-          "enum": [
-            "toggle_chat",
-            "do_nothing"
-          ],
-          "title": "On Right",
-          "type": "string"
-        }
-      },
-      "title": "AiChatCallbacksConfig",
-      "type": "object"
-    },
-    "AiChatConfig": {
-      "additionalProperties": false,
-      "properties": {
-        "label": {
-          "default": "AI Chat",
-          "title": "Label",
-          "type": "string"
-        },
-        "chat": {
-          "$ref": "#/$defs/ChatConfig",
-          "default": {
-            "blur": true,
-            "round_corners": true,
-            "round_corners_type": "normal",
-            "border_color": "system",
-            "alignment": "right",
-            "direction": "down",
-            "offset_top": 6,
-            "offset_left": 0
-          }
-        },
-        "icons": {
-          "$ref": "#/$defs/core__validation__widgets__yasb__ai_chat__IconsConfig",
-          "default": {
-            "send": "\uf1d8",
-            "stop": "\uf04d",
-            "clear": "\uf1f8",
-            "assistant": "\udb81\ude74",
-            "attach": "\uf0c6",
-            "float_on": "\udb84\udcac",
-            "float_off": "\udb84\udca9",
-            "close": "\uf00d",
-            "copy": "\uebcc",
-            "copy_check": "\uf00c"
-          }
-        },
-        "notification_dot": {
-          "$ref": "#/$defs/core__validation__widgets__yasb__ai_chat__NotificationDotConfig",
-          "default": {
-            "enabled": true,
-            "corner": "bottom_left",
-            "color": "red",
-            "margin": [
-              1,
-              1
-            ]
-          }
-        },
-        "start_floating": {
-          "default": true,
-          "title": "Start Floating",
-          "type": "boolean"
-        },
-        "callbacks": {
-          "$ref": "#/$defs/AiChatCallbacksConfig",
-          "default": {
-            "on_left": "toggle_chat",
-            "on_middle": "do_nothing",
-            "on_right": "do_nothing"
-          }
-        },
-        "keybindings": {
-          "default": [],
-          "items": {
-            "$ref": "#/$defs/KeybindingConfig"
-          },
-          "title": "Keybindings",
-          "type": "array"
-        },
-        "providers": {
-          "items": {
-            "$ref": "#/$defs/ProviderConfig"
-          },
-          "title": "Providers",
-          "type": "array"
-        }
-      },
-      "required": [
-        "providers"
-      ],
-      "title": "AiChatConfig",
-      "type": "object"
-    },
-    "AiChatEntry": {
-      "properties": {
-        "type": {
-          "const": "yasb.ai_chat.AiChatWidget",
-          "title": "Type",
-          "type": "string"
-        },
-        "options": {
-          "$ref": "#/$defs/AiChatConfig"
-        }
-      },
-      "required": [
-        "type",
-        "options"
-      ],
-      "title": "AiChatEntry",
       "type": "object"
     },
     "AnimationConfig": {
@@ -2319,66 +1926,6 @@
       "title": "ChargingOptionsConfig",
       "type": "object"
     },
-    "ChatConfig": {
-      "additionalProperties": false,
-      "properties": {
-        "blur": {
-          "default": true,
-          "title": "Blur",
-          "type": "boolean"
-        },
-        "round_corners": {
-          "default": true,
-          "title": "Round Corners",
-          "type": "boolean"
-        },
-        "round_corners_type": {
-          "default": "normal",
-          "enum": [
-            "normal",
-            "small"
-          ],
-          "title": "Round Corners Type",
-          "type": "string"
-        },
-        "border_color": {
-          "default": "system",
-          "title": "Border Color",
-          "type": "string"
-        },
-        "alignment": {
-          "default": "right",
-          "enum": [
-            "left",
-            "right",
-            "center"
-          ],
-          "title": "Alignment",
-          "type": "string"
-        },
-        "direction": {
-          "default": "down",
-          "enum": [
-            "up",
-            "down"
-          ],
-          "title": "Direction",
-          "type": "string"
-        },
-        "offset_top": {
-          "default": 6,
-          "title": "Offset Top",
-          "type": "integer"
-        },
-        "offset_left": {
-          "default": 0,
-          "title": "Offset Left",
-          "type": "integer"
-        }
-      },
-      "title": "ChatConfig",
-      "type": "object"
-    },
     "ClaudeUsageCallbacksConfig": {
       "additionalProperties": false,
       "properties": {
@@ -4125,7 +3672,7 @@
           "type": "array"
         },
         "notification_dot": {
-          "$ref": "#/$defs/core__validation__widgets__yasb__github__NotificationDotConfig",
+          "$ref": "#/$defs/NotificationDotConfig",
           "default": {
             "enabled": true,
             "corner": "bottom_left",
@@ -4528,6 +4075,76 @@
         "options"
       ],
       "title": "GlazewmBindingModeEntry",
+      "type": "object"
+    },
+    "GlazewmStackConfig": {
+      "additionalProperties": false,
+      "properties": {
+        "glazewm_server_uri": {
+          "default": "ws://localhost:6123",
+          "title": "Glazewm Server Uri",
+          "type": "string"
+        },
+        "offline_label": {
+          "default": "GlazeWM Offline",
+          "title": "Offline Label",
+          "type": "string"
+        },
+        "hide_if_offline": {
+          "default": false,
+          "title": "Hide If Offline",
+          "type": "boolean"
+        },
+        "monitor_exclusive": {
+          "default": true,
+          "title": "Monitor Exclusive",
+          "type": "boolean"
+        },
+        "label": {
+          "default": "{title}",
+          "title": "Label",
+          "type": "string"
+        },
+        "max_title_length": {
+          "default": 20,
+          "title": "Max Title Length",
+          "type": "integer"
+        },
+        "truncate_ellipsis": {
+          "default": "...",
+          "title": "Truncate Ellipsis",
+          "type": "string"
+        },
+        "enable_scroll_switching": {
+          "default": true,
+          "title": "Enable Scroll Switching",
+          "type": "boolean"
+        },
+        "reverse_scroll_direction": {
+          "default": false,
+          "title": "Reverse Scroll Direction",
+          "type": "boolean"
+        }
+      },
+      "title": "GlazewmStackConfig",
+      "type": "object"
+    },
+    "GlazewmStackEntry": {
+      "properties": {
+        "type": {
+          "const": "glazewm.stack.GlazewmStackWidget",
+          "title": "Type",
+          "type": "string"
+        },
+        "options": {
+          "$ref": "#/$defs/GlazewmStackConfig"
+        }
+      },
+      "required": [
+        "type",
+        "options"
+      ],
+      "title": "GlazewmStackEntry",
       "type": "object"
     },
     "GlazewmTilingDirectionConfig": {
@@ -5529,321 +5146,6 @@
         }
       },
       "title": "KillProcessProviderConfig",
-      "type": "object"
-    },
-    "KomorebiConfig": {
-      "additionalProperties": false,
-      "properties": {
-        "start_command": {
-          "anyOf": [
-            {
-              "type": "string"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "default": null,
-          "title": "Start Command"
-        },
-        "stop_command": {
-          "anyOf": [
-            {
-              "type": "string"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "default": null,
-          "title": "Stop Command"
-        },
-        "reload_command": {
-          "anyOf": [
-            {
-              "type": "string"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "default": null,
-          "title": "Reload Command"
-        }
-      },
-      "title": "KomorebiConfig",
-      "type": "object"
-    },
-    "KomorebiControlCallbacksConfig": {
-      "additionalProperties": false,
-      "properties": {
-        "on_left": {
-          "default": "toggle_menu",
-          "title": "On Left",
-          "type": "string"
-        },
-        "on_middle": {
-          "default": "do_nothing",
-          "title": "On Middle",
-          "type": "string"
-        },
-        "on_right": {
-          "default": "do_nothing",
-          "title": "On Right",
-          "type": "string"
-        }
-      },
-      "title": "KomorebiControlCallbacksConfig",
-      "type": "object"
-    },
-    "KomorebiControlWidgetConfig": {
-      "additionalProperties": false,
-      "properties": {
-        "label": {
-          "default": "\udb80\uddd9",
-          "title": "Label",
-          "type": "string"
-        },
-        "icons": {
-          "$ref": "#/$defs/core__validation__widgets__komorebi__control__IconsConfig",
-          "default": {
-            "start": "\uead3",
-            "stop": "\uead7",
-            "reload": "\uead2"
-          }
-        },
-        "run_ahk": {
-          "default": false,
-          "title": "Run Ahk",
-          "type": "boolean"
-        },
-        "run_whkd": {
-          "default": false,
-          "title": "Run Whkd",
-          "type": "boolean"
-        },
-        "run_masir": {
-          "default": false,
-          "title": "Run Masir",
-          "type": "boolean"
-        },
-        "config_path": {
-          "anyOf": [
-            {
-              "type": "string"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "default": null,
-          "title": "Config Path"
-        },
-        "show_version": {
-          "default": true,
-          "title": "Show Version",
-          "type": "boolean"
-        },
-        "komorebi_menu": {
-          "$ref": "#/$defs/KomorebiMenuConfig",
-          "default": {
-            "blur": true,
-            "round_corners": true,
-            "round_corners_type": "normal",
-            "border_color": "System",
-            "alignment": "right",
-            "direction": "down",
-            "offset_top": 6,
-            "offset_left": 0
-          }
-        },
-        "keybindings": {
-          "default": [],
-          "items": {
-            "$ref": "#/$defs/KeybindingConfig"
-          },
-          "title": "Keybindings",
-          "type": "array"
-        },
-        "callbacks": {
-          "$ref": "#/$defs/KomorebiControlCallbacksConfig",
-          "default": {
-            "on_left": "toggle_menu",
-            "on_middle": "do_nothing",
-            "on_right": "do_nothing"
-          }
-        }
-      },
-      "title": "KomorebiControlWidgetConfig",
-      "type": "object"
-    },
-    "KomorebiControlWidgetEntry": {
-      "properties": {
-        "type": {
-          "const": "komorebi.control.KomorebiControlWidget",
-          "title": "Type",
-          "type": "string"
-        },
-        "options": {
-          "$ref": "#/$defs/KomorebiControlWidgetConfig"
-        }
-      },
-      "required": [
-        "type",
-        "options"
-      ],
-      "title": "KomorebiControlWidgetEntry",
-      "type": "object"
-    },
-    "KomorebiMenuConfig": {
-      "additionalProperties": false,
-      "properties": {
-        "blur": {
-          "default": true,
-          "title": "Blur",
-          "type": "boolean"
-        },
-        "round_corners": {
-          "default": true,
-          "title": "Round Corners",
-          "type": "boolean"
-        },
-        "round_corners_type": {
-          "default": "normal",
-          "enum": [
-            "normal",
-            "small"
-          ],
-          "title": "Round Corners Type",
-          "type": "string"
-        },
-        "border_color": {
-          "default": "System",
-          "title": "Border Color",
-          "type": "string"
-        },
-        "alignment": {
-          "default": "right",
-          "title": "Alignment",
-          "type": "string"
-        },
-        "direction": {
-          "default": "down",
-          "title": "Direction",
-          "type": "string"
-        },
-        "offset_top": {
-          "default": 6,
-          "title": "Offset Top",
-          "type": "integer"
-        },
-        "offset_left": {
-          "default": 0,
-          "title": "Offset Left",
-          "type": "integer"
-        }
-      },
-      "title": "KomorebiMenuConfig",
-      "type": "object"
-    },
-    "KomorebiWorkspacesConfig": {
-      "additionalProperties": false,
-      "properties": {
-        "label_offline": {
-          "default": "Komorebi Offline",
-          "title": "Label Offline",
-          "type": "string"
-        },
-        "label_workspace_btn": {
-          "default": "{index}",
-          "title": "Label Workspace Btn",
-          "type": "string"
-        },
-        "label_workspace_active_btn": {
-          "default": "{index}",
-          "title": "Label Workspace Active Btn",
-          "type": "string"
-        },
-        "label_workspace_populated_btn": {
-          "default": "{index}",
-          "title": "Label Workspace Populated Btn",
-          "type": "string"
-        },
-        "label_default_name": {
-          "default": "",
-          "title": "Label Default Name",
-          "type": "string"
-        },
-        "label_float_override": {
-          "default": "Override Active",
-          "title": "Label Float Override",
-          "type": "string"
-        },
-        "toggle_workspace_layer": {
-          "$ref": "#/$defs/ToggleWorkspaceLayerConfig",
-          "default": {
-            "enabled": false,
-            "tiling_label": "Tiling",
-            "floating_label": "Floating"
-          }
-        },
-        "hide_if_offline": {
-          "default": false,
-          "title": "Hide If Offline",
-          "type": "boolean"
-        },
-        "label_zero_index": {
-          "default": false,
-          "title": "Label Zero Index",
-          "type": "boolean"
-        },
-        "hide_empty_workspaces": {
-          "default": false,
-          "title": "Hide Empty Workspaces",
-          "type": "boolean"
-        },
-        "app_icons": {
-          "$ref": "#/$defs/core__validation__widgets__komorebi__workspaces__AppIconsConfig",
-          "default": {
-            "enabled_populated": false,
-            "enabled_active": false,
-            "size": 16,
-            "max_icons": 0,
-            "hide_label": false,
-            "hide_duplicates": false,
-            "hide_floating": false
-          }
-        },
-        "enable_scroll_switching": {
-          "default": false,
-          "title": "Enable Scroll Switching",
-          "type": "boolean"
-        },
-        "reverse_scroll_direction": {
-          "default": false,
-          "title": "Reverse Scroll Direction",
-          "type": "boolean"
-        }
-      },
-      "title": "KomorebiWorkspacesConfig",
-      "type": "object"
-    },
-    "KomorebiWorkspacesEntry": {
-      "properties": {
-        "type": {
-          "const": "komorebi.workspaces.WorkspaceWidget",
-          "title": "Type",
-          "type": "string"
-        },
-        "options": {
-          "$ref": "#/$defs/KomorebiWorkspacesConfig"
-        }
-      },
-      "required": [
-        "type",
-        "options"
-      ],
-      "title": "KomorebiWorkspacesEntry",
       "type": "object"
     },
     "LanguageCallbacksConfig": {
@@ -7309,69 +6611,6 @@
       "title": "MicrophoneEntry",
       "type": "object"
     },
-    "ModelConfig": {
-      "additionalProperties": false,
-      "properties": {
-        "name": {
-          "title": "Name",
-          "type": "string"
-        },
-        "label": {
-          "title": "Label",
-          "type": "string"
-        },
-        "default": {
-          "type": "boolean",
-          "default": false,
-          "title": "Default"
-        },
-        "max_tokens": {
-          "default": 0,
-          "title": "Max Tokens",
-          "type": "integer"
-        },
-        "temperature": {
-          "default": 0.7,
-          "title": "Temperature",
-          "type": "number"
-        },
-        "top_p": {
-          "default": 0.95,
-          "title": "Top P",
-          "type": "number"
-        },
-        "max_image_size": {
-          "default": 0,
-          "minimum": 0,
-          "title": "Max Image Size",
-          "type": "integer"
-        },
-        "max_attachment_size": {
-          "default": 256,
-          "minimum": 0,
-          "title": "Max Attachment Size",
-          "type": "integer"
-        },
-        "instructions": {
-          "anyOf": [
-            {
-              "type": "string"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "default": null,
-          "title": "Instructions"
-        }
-      },
-      "required": [
-        "name",
-        "label"
-      ],
-      "title": "ModelConfig",
-      "type": "object"
-    },
     "NotesCallbacksConfig": {
       "additionalProperties": false,
       "properties": {
@@ -7494,6 +6733,38 @@
         "options"
       ],
       "title": "NotesEntry",
+      "type": "object"
+    },
+    "NotificationDotConfig": {
+      "additionalProperties": false,
+      "properties": {
+        "enabled": {
+          "default": true,
+          "title": "Enabled",
+          "type": "boolean"
+        },
+        "corner": {
+          "$ref": "#/$defs/Corner",
+          "default": "bottom_left"
+        },
+        "color": {
+          "default": "red",
+          "title": "Color",
+          "type": "string"
+        },
+        "margin": {
+          "default": [
+            1,
+            1
+          ],
+          "items": {
+            "type": "integer"
+          },
+          "title": "Margin",
+          "type": "array"
+        }
+      },
+      "title": "NotificationDotConfig",
       "type": "object"
     },
     "NotificationsCallbacksConfig": {
@@ -8804,11 +8075,13 @@
           "title": "Class Name",
           "type": "string"
         },
-        "update_interval": {
-          "default": 5000,
-          "minimum": 0,
-          "title": "Update Interval",
-          "type": "integer"
+        "class_map": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "default": {},
+          "title": "Class Map",
+          "type": "object"
         },
         "menu": {
           "$ref": "#/$defs/PowerPlanMenuConfig",
@@ -8948,73 +8221,6 @@
         }
       },
       "title": "PreviewConfig",
-      "type": "object"
-    },
-    "ProviderConfig": {
-      "additionalProperties": false,
-      "properties": {
-        "provider": {
-          "title": "Provider",
-          "type": "string"
-        },
-        "provider_type": {
-          "default": "openai",
-          "enum": [
-            "openai",
-            "copilot"
-          ],
-          "title": "Provider Type",
-          "type": "string"
-        },
-        "api_endpoint": {
-          "anyOf": [
-            {
-              "type": "string"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "default": null,
-          "title": "Api Endpoint"
-        },
-        "credential": {
-          "anyOf": [
-            {
-              "type": "string"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "default": null,
-          "title": "Credential"
-        },
-        "models": {
-          "default": [],
-          "items": {
-            "$ref": "#/$defs/ModelConfig"
-          },
-          "title": "Models",
-          "type": "array"
-        },
-        "copilot_cli_url": {
-          "anyOf": [
-            {
-              "type": "string"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "default": null,
-          "title": "Copilot Cli Url"
-        }
-      },
-      "required": [
-        "provider"
-      ],
-      "title": "ProviderConfig",
       "type": "object"
     },
     "QuickLaunchCallbacksConfig": {
@@ -10133,140 +9339,6 @@
       "title": "SshProviderConfig",
       "type": "object"
     },
-    "StackConfig": {
-      "additionalProperties": false,
-      "properties": {
-        "label_offline": {
-          "default": "Komorebi Offline",
-          "title": "Label Offline",
-          "type": "string"
-        },
-        "label_window": {
-          "default": "{title}",
-          "title": "Label Window",
-          "type": "string"
-        },
-        "label_window_active": {
-          "default": "{title}",
-          "title": "Label Window Active",
-          "type": "string"
-        },
-        "label_no_window": {
-          "default": "",
-          "title": "Label No Window",
-          "type": "string"
-        },
-        "label_zero_index": {
-          "default": false,
-          "title": "Label Zero Index",
-          "type": "boolean"
-        },
-        "hide_if_offline": {
-          "default": false,
-          "title": "Hide If Offline",
-          "type": "boolean"
-        },
-        "show_icons": {
-          "default": "never",
-          "enum": [
-            "focused",
-            "always",
-            "never"
-          ],
-          "title": "Show Icons",
-          "type": "string"
-        },
-        "icon_size": {
-          "default": 16,
-          "title": "Icon Size",
-          "type": "integer"
-        },
-        "show_only_stack": {
-          "default": false,
-          "title": "Show Only Stack",
-          "type": "boolean"
-        },
-        "max_length": {
-          "anyOf": [
-            {
-              "type": "integer"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "default": null,
-          "title": "Max Length"
-        },
-        "max_length_active": {
-          "anyOf": [
-            {
-              "type": "integer"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "default": null,
-          "title": "Max Length Active"
-        },
-        "max_length_overall": {
-          "anyOf": [
-            {
-              "type": "integer"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "default": null,
-          "title": "Max Length Overall"
-        },
-        "max_length_ellipsis": {
-          "default": "...",
-          "title": "Max Length Ellipsis",
-          "type": "string"
-        },
-        "rewrite": {
-          "default": [],
-          "items": {
-            "$ref": "#/$defs/RewriteConfig"
-          },
-          "title": "Rewrite",
-          "type": "array"
-        },
-        "enable_scroll_switching": {
-          "default": false,
-          "title": "Enable Scroll Switching",
-          "type": "boolean"
-        },
-        "reverse_scroll_direction": {
-          "default": false,
-          "title": "Reverse Scroll Direction",
-          "type": "boolean"
-        }
-      },
-      "title": "StackConfig",
-      "type": "object"
-    },
-    "StackEntry": {
-      "properties": {
-        "type": {
-          "const": "komorebi.stack.StackWidget",
-          "title": "Type",
-          "type": "string"
-        },
-        "options": {
-          "$ref": "#/$defs/StackConfig"
-        }
-      },
-      "required": [
-        "type",
-        "options"
-      ],
-      "title": "StackEntry",
-      "type": "object"
-    },
     "StatusIconsConfig": {
       "additionalProperties": false,
       "properties": {
@@ -10803,28 +9875,6 @@
         "options"
       ],
       "title": "TodoEntry",
-      "type": "object"
-    },
-    "ToggleWorkspaceLayerConfig": {
-      "additionalProperties": false,
-      "properties": {
-        "enabled": {
-          "default": false,
-          "title": "Enabled",
-          "type": "boolean"
-        },
-        "tiling_label": {
-          "default": "Tiling",
-          "title": "Tiling Label",
-          "type": "string"
-        },
-        "floating_label": {
-          "default": "Floating",
-          "title": "Floating Label",
-          "type": "string"
-        }
-      },
-      "title": "ToggleWorkspaceLayerConfig",
       "type": "object"
     },
     "TooltipBlurEffect": {
@@ -13033,166 +12083,6 @@
       "title": "AppIconsConfig",
       "type": "object"
     },
-    "core__validation__widgets__komorebi__control__IconsConfig": {
-      "additionalProperties": false,
-      "properties": {
-        "start": {
-          "default": "\uead3",
-          "title": "Start",
-          "type": "string"
-        },
-        "stop": {
-          "default": "\uead7",
-          "title": "Stop",
-          "type": "string"
-        },
-        "reload": {
-          "default": "\uead2",
-          "title": "Reload",
-          "type": "string"
-        }
-      },
-      "title": "IconsConfig",
-      "type": "object"
-    },
-    "core__validation__widgets__komorebi__workspaces__AppIconsConfig": {
-      "additionalProperties": false,
-      "properties": {
-        "enabled_populated": {
-          "default": false,
-          "title": "Enabled Populated",
-          "type": "boolean"
-        },
-        "enabled_active": {
-          "default": false,
-          "title": "Enabled Active",
-          "type": "boolean"
-        },
-        "size": {
-          "default": 16,
-          "title": "Size",
-          "type": "integer"
-        },
-        "max_icons": {
-          "default": 0,
-          "title": "Max Icons",
-          "type": "integer"
-        },
-        "hide_label": {
-          "default": false,
-          "title": "Hide Label",
-          "type": "boolean"
-        },
-        "hide_duplicates": {
-          "default": false,
-          "title": "Hide Duplicates",
-          "type": "boolean"
-        },
-        "hide_floating": {
-          "default": false,
-          "title": "Hide Floating",
-          "type": "boolean"
-        }
-      },
-      "title": "AppIconsConfig",
-      "type": "object"
-    },
-    "core__validation__widgets__yasb__ai_chat__IconsConfig": {
-      "additionalProperties": false,
-      "properties": {
-        "send": {
-          "default": "\uf1d8",
-          "title": "Send",
-          "type": "string"
-        },
-        "stop": {
-          "default": "\uf04d",
-          "title": "Stop",
-          "type": "string"
-        },
-        "clear": {
-          "default": "\uf1f8",
-          "title": "Clear",
-          "type": "string"
-        },
-        "assistant": {
-          "default": "\udb81\ude74",
-          "title": "Assistant",
-          "type": "string"
-        },
-        "attach": {
-          "default": "\uf0c6",
-          "title": "Attach",
-          "type": "string"
-        },
-        "float_on": {
-          "default": "\udb84\udcac",
-          "title": "Float On",
-          "type": "string"
-        },
-        "float_off": {
-          "default": "\udb84\udca9",
-          "title": "Float Off",
-          "type": "string"
-        },
-        "close": {
-          "default": "\uf00d",
-          "title": "Close",
-          "type": "string"
-        },
-        "copy": {
-          "default": "\uebcc",
-          "title": "Copy",
-          "type": "string"
-        },
-        "copy_check": {
-          "default": "\uf00c",
-          "title": "Copy Check",
-          "type": "string"
-        }
-      },
-      "title": "IconsConfig",
-      "type": "object"
-    },
-    "core__validation__widgets__yasb__ai_chat__NotificationDotConfig": {
-      "additionalProperties": false,
-      "properties": {
-        "enabled": {
-          "default": true,
-          "title": "Enabled",
-          "type": "boolean"
-        },
-        "corner": {
-          "default": "bottom_left",
-          "enum": [
-            "top_left",
-            "top_right",
-            "bottom_left",
-            "bottom_right"
-          ],
-          "title": "Corner",
-          "type": "string"
-        },
-        "color": {
-          "default": "red",
-          "title": "Color",
-          "type": "string"
-        },
-        "margin": {
-          "default": [
-            1,
-            1
-          ],
-          "items": {
-            "type": "integer"
-          },
-          "title": "Margin",
-          "type": "array"
-        }
-      },
-      "title": "NotificationDotConfig",
-      "type": "object"
-    },
     "core__validation__widgets__yasb__battery__ProgressBarConfig": {
       "additionalProperties": false,
       "properties": {
@@ -13499,38 +12389,6 @@
         }
       },
       "title": "ProgressBarConfig",
-      "type": "object"
-    },
-    "core__validation__widgets__yasb__github__NotificationDotConfig": {
-      "additionalProperties": false,
-      "properties": {
-        "enabled": {
-          "default": true,
-          "title": "Enabled",
-          "type": "boolean"
-        },
-        "corner": {
-          "$ref": "#/$defs/Corner",
-          "default": "bottom_left"
-        },
-        "color": {
-          "default": "red",
-          "title": "Color",
-          "type": "string"
-        },
-        "margin": {
-          "default": [
-            1,
-            1
-          ],
-          "items": {
-            "type": "integer"
-          },
-          "title": "Margin",
-          "type": "array"
-        }
-      },
-      "title": "NotificationDotConfig",
       "type": "object"
     },
     "core__validation__widgets__yasb__gpu__ProgressBarConfig": {
@@ -14469,14 +13327,6 @@
         }
       }
     },
-    "komorebi": {
-      "$ref": "#/$defs/KomorebiConfig",
-      "default": {
-        "start_command": null,
-        "stop_command": null,
-        "reload_command": null
-      }
-    },
     "glazewm": {
       "$ref": "#/$defs/GlazeWMConfig",
       "default": {
@@ -14561,28 +13411,16 @@
             "$ref": "#/$defs/GlazewmBindingModeEntry"
           },
           {
+            "$ref": "#/$defs/GlazewmStackEntry"
+          },
+          {
             "$ref": "#/$defs/GlazewmTilingDirectionEntry"
           },
           {
             "$ref": "#/$defs/GlazewmWorkspacesEntry"
           },
           {
-            "$ref": "#/$defs/ActiveLayoutEntry"
-          },
-          {
-            "$ref": "#/$defs/KomorebiControlWidgetEntry"
-          },
-          {
-            "$ref": "#/$defs/StackEntry"
-          },
-          {
-            "$ref": "#/$defs/KomorebiWorkspacesEntry"
-          },
-          {
             "$ref": "#/$defs/ActiveWindowEntry"
-          },
-          {
-            "$ref": "#/$defs/AiChatEntry"
           },
           {
             "$ref": "#/$defs/ApplicationsWidgetEntry"

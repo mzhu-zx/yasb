@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(set -e)",
+      "Bash(mkdir -p block/widgets/yasb block/widgets/services block/validation/widgets/yasb block/events)",
+      "Bash(git mv *)"
+    ]
+  }
+}

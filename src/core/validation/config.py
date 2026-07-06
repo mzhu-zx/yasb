@@ -17,12 +17,6 @@ class TooltipOptions(CustomBaseModel):
     blur_effect: TooltipBlurEffect = TooltipBlurEffect()
 
 
-class KomorebiConfig(CustomBaseModel):
-    start_command: str | None = None
-    stop_command: str | None = None
-    reload_command: str | None = None
-
-
 class GlazeWMConfig(CustomBaseModel):
     start_command: str | None = None
     stop_command: str | None = None
@@ -37,7 +31,6 @@ class YasbConfig(CustomBaseModel):
     show_systray: bool = True
     system_colors: bool = False
     tooltip: TooltipOptions = TooltipOptions()
-    komorebi: KomorebiConfig = KomorebiConfig()
     glazewm: GlazeWMConfig = GlazeWMConfig()
     bars: dict[str, BarConfig] = {"yasb-bar": BarConfig()}
     widgets: dict[str, str | dict[str, Any]] = {}

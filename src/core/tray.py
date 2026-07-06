@@ -51,14 +51,7 @@ class SystemTrayManager(QSystemTrayIcon):
 
     def _load_config(self):
         config = self._bar_manager.config
-        self.komorebi_enabled = False
         self.glazewm_enabled = False
-
-        if config and config.komorebi:
-            self.komorebi_start = config.komorebi.start_command
-            self.komorebi_stop = config.komorebi.stop_command
-            self.komorebi_reload = config.komorebi.reload_command
-            self.komorebi_enabled = any([self.komorebi_start, self.komorebi_stop, self.komorebi_reload])
 
         if config and config.glazewm:
             self.glazewm_start = config.glazewm.start_command
@@ -119,17 +112,6 @@ class SystemTrayManager(QSystemTrayIcon):
                 add_item(hmenu, "Get Themes", lambda: os.startfile(THEME_EXE_PATH))
             add_item(hmenu, "Reload YASB", self._reload_application)
             add_sep(hmenu)
-
-            if self.komorebi_enabled and self.is_wm_installed("komorebi"):
-                km_sub = win32gui.CreatePopupMenu()
-                if self.komorebi_start:
-                    add_item(km_sub, "Start Komorebi", lambda: self._run_wm_command("Komorebi", self.komorebi_start))
-                if self.komorebi_stop:
-                    add_item(km_sub, "Stop Komorebi", lambda: self._run_wm_command("Komorebi", self.komorebi_stop))
-                if self.komorebi_reload:
-                    add_item(km_sub, "Reload Komorebi", lambda: self._run_wm_command("Komorebi", self.komorebi_reload))
-                win32gui.AppendMenu(hmenu, win32con.MF_POPUP, km_sub, "Komorebi")
-                add_sep(hmenu)
 
             if self.glazewm_enabled and self.is_wm_installed("glazewm"):
                 gw_sub = win32gui.CreatePopupMenu()

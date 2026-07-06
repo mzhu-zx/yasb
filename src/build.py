@@ -26,7 +26,6 @@ hook_dll_name = "YASBTrayHook_arm64.dll" if display_arch == "ARM64" else "YASBTr
 build_options = {
     "packages": [
         "core.widgets.yasb",
-        "core.widgets.komorebi",
         "core.widgets.glazewm",
     ],
     "constants": [f"ARCHITECTURE='{display_arch}'"],
