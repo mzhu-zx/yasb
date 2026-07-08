@@ -160,6 +160,53 @@ def parse_hotkey(hotkey: str) -> tuple[int, int] | None:
     return modifiers, vk
 
 
+# Prefixes for the GlazeWM `hear` pseudo-key layer. A GlazeWM broadcast word
+# `yasb-<x>` (or `yasb_<x>`) is routed to the keybinding declared as
+# `glazewm-<x>` (or `glazewm_<x>` / `glazewm+<x>`). Both sides are compared on
+# their normalized suffix, so `-` and `_` are interchangeable.
+_HEAR_WORD_PREFIXES = ("yasb-", "yasb_")
+_GLAZEWM_KEY_PREFIXES = ("glazewm-", "glazewm_", "glazewm+")
+
+
+def _normalize_suffix(suffix: str) -> str:
+    return suffix.strip().lower().replace("_", "-")
+
+
+def _strip_prefix(value: str | None, prefixes: tuple[str, ...]) -> str | None:
+    """Returns the normalized suffix if `value` starts with one of `prefixes`."""
+    if not value or not isinstance(value, str):
+        return None
+    lowered = value.strip().lower()
+    for prefix in prefixes:
+        if lowered.startswith(prefix):
+            suffix = value.strip()[len(prefix):]
+            return _normalize_suffix(suffix) if suffix else None
+    return None
+
+
+def parse_glazewm_pseudokey(keys: str | None) -> str | None:
+    """Parses a `glazewm-<x>` pseudo-key into its normalized suffix, else None."""
+    return _strip_prefix(keys, _GLAZEWM_KEY_PREFIXES)
+
+
+def hear_word_suffix(word: str | None) -> str | None:
+    """Parses a GlazeWM `hear` word `yasb-<x>` into its normalized suffix, else None."""
+    return _strip_prefix(word, _HEAR_WORD_PREFIXES)
+
+
+def resolve_binding_screen(binding: "HotkeyBinding", screens: set[str] | None) -> str:
+    """Resolves the target screen name for a binding's `screen` mode."""
+    from core.utils.win32.utils import find_focused_screen
+
+    screen_name = find_focused_screen(
+        follow_mouse=binding.screen == "cursor",
+        follow_window=binding.screen == "active",
+        follow_primary=binding.screen == "primary",
+        screens=screens,
+    )
+    return screen_name or ""
+
+
 class HotkeyDispatcher(QObject):
     """Dispatches hotkey events to widgets via EventService on the main Qt thread."""
 
@@ -211,17 +258,7 @@ class HotkeyListener(QThread):
 
     def _emit_binding(self, binding: HotkeyBinding) -> None:
         """Emit a hotkey event to the dispatcher on the main thread."""
-        from core.utils.win32.utils import find_focused_screen
-
-        follow_primary = binding.screen == "primary"
-        follow_mouse = binding.screen == "cursor"
-        follow_window = binding.screen == "active"
-        screen_name = find_focused_screen(
-            follow_mouse=follow_mouse,
-            follow_window=follow_window,
-            follow_primary=follow_primary,
-            screens=self._bar_screens,
-        )
+        screen_name = resolve_binding_screen(binding, self._bar_screens)
 
         QMetaObject.invokeMethod(
             self._dispatcher,
@@ -285,6 +322,10 @@ def collect_widget_keybindings(widget_name: str, keybindings: list[dict]) -> lis
             logging.warning("Invalid keybinding for %s: missing 'keys' or 'action'", widget_name)
             continue
 
+        # GlazeWM pseudo-keys are handled by GlazewmHearListener, not RegisterHotKey.
+        if parse_glazewm_pseudokey(keys) is not None:
+            continue
+
         parsed = parse_hotkey(keys)
         if parsed is None:
             continue
@@ -299,5 +340,37 @@ def collect_widget_keybindings(widget_name: str, keybindings: list[dict]) -> lis
             screen=kb.get("screen", "active"),
         )
         bindings.append(binding)
+
+    return bindings
+
+
+def collect_glazewm_keybindings(widget_name: str, keybindings: list[dict]) -> list[HotkeyBinding]:
+    """Parse `glazewm-*` pseudo-keybinding configs for a widget into HotkeyBinding objects.
+
+    These are never registered with Windows; they are matched against GlazeWM
+    `hear` broadcast words by GlazewmHearListener. `vk`/`modifiers` are unused.
+    """
+    bindings = []
+
+    for kb in keybindings:
+        keys = kb.get("keys", "")
+        action = kb.get("action", "")
+
+        if not keys or not action:
+            continue
+
+        if parse_glazewm_pseudokey(keys) is None:
+            continue
+
+        bindings.append(
+            HotkeyBinding(
+                hotkey=keys,
+                widget_name=widget_name,
+                action=action,
+                vk=0,
+                modifiers=0,
+                screen=kb.get("screen", "active"),
+            )
+        )
 
     return bindings

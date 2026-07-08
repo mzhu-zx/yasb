@@ -18,8 +18,10 @@ from core.utils.win32.hotkeys import (
     HotkeyBinding,
     HotkeyDispatcher,
     HotkeyListener,
+    collect_glazewm_keybindings,
     collect_widget_keybindings,
 )
+from core.widgets.services.glazewm.hear import GlazewmHearListener
 from core.validation.bar import BarConfig
 from core.validation.config import YasbConfig
 
@@ -45,7 +47,9 @@ class BarManager(QObject):
         self._prev_listeners = set()
         self._hotkey_listener: HotkeyListener | None = None
         self._hotkey_dispatcher: HotkeyDispatcher | None = None
+        self._glazewm_hear_listener: GlazewmHearListener | None = None
         self._collected_keybindings: list[HotkeyBinding] = []
+        self._collected_glazewm_bindings: list[HotkeyBinding] = []
         self._registered_hotkey_widgets: set[tuple[str, str]] = set()  # (widget_name, screen_name)
 
         self.styles_modified.connect(self.on_styles_modified)
@@ -106,6 +110,13 @@ class BarManager(QObject):
             self._threads[listener] = thread
 
     def stop_listener_threads(self):
+        # Stop the GlazeWM hear listener before tearing down the shared dispatcher.
+        if self._glazewm_hear_listener is not None:
+            logging.info("Stopping GlazewmHearListener...")
+            with suppress(Exception):
+                self._glazewm_hear_listener.stop()
+            self._glazewm_hear_listener = None
+
         # Stop hotkey listener first
         if self._hotkey_listener is not None:
             logging.info("Stopping HotkeyListener...")
@@ -179,12 +190,14 @@ class BarManager(QObject):
         self._initialized_screens = initialized_screens
         self._collect_keybindings()
         self._start_hotkey_listener()
+        self._start_glazewm_hear_listener()
         self.run_listeners_in_threads()
         self._widget_builder.raise_alerts_if_errors_present()
 
     def _collect_keybindings(self) -> None:
         """Collect keybindings from all widget configurations."""
         self._collected_keybindings.clear()
+        self._collected_glazewm_bindings.clear()
         seen_hotkeys: dict[str, str] = {}
 
         for widget_name, widget_config in self.config.widgets.items():
@@ -193,6 +206,8 @@ class BarManager(QObject):
 
             if not keybindings:
                 continue
+
+            self._collected_glazewm_bindings.extend(collect_glazewm_keybindings(widget_name, keybindings))
 
             bindings = collect_widget_keybindings(widget_name, keybindings)
 
@@ -227,6 +242,26 @@ class BarManager(QObject):
         )
         self._hotkey_listener.start()
         logging.info("Starting HotkeyListener...")
+
+    def _start_glazewm_hear_listener(self) -> None:
+        """Start the GlazeWM `hear` listener if any glazewm pseudo-keybindings exist."""
+        if not self._collected_glazewm_bindings:
+            return
+
+        # The hear listener dispatches through the same path as physical hotkeys,
+        # so it shares (and, if needed, creates) the HotkeyDispatcher.
+        if self._hotkey_dispatcher is None:
+            self._hotkey_dispatcher = HotkeyDispatcher()
+
+        listener = GlazewmHearListener(
+            self._collected_glazewm_bindings,
+            self._hotkey_dispatcher,
+            self._initialized_screens,
+            self.config.glazewm.server_uri,
+        )
+        self._glazewm_hear_listener = listener
+        listener.start()
+        logging.info("Starting GlazewmHearListener...")
 
     def create_bar(self, config: BarConfig, name: str, screen: QScreen, init: bool = False) -> None:
         screen_name = screen.name().replace("\\", "").replace(".", "")

@@ -70,6 +70,7 @@ class FocusedContainer:
 class MessageType(StrEnum):
     EVENT_SUBSCRIPTION = auto()
     CLIENT_RESPONSE = auto()
+    HEAR_BROADCAST = auto()
 
 
 class QueryType(StrEnum):
@@ -94,6 +95,7 @@ class GlazewmClient(QObject):
     binding_mode_changed = pyqtSignal(BindingMode)
     stack_focus_processed = pyqtSignal(object)
     focus_changed_processed = pyqtSignal(object)
+    hear_broadcast_processed = pyqtSignal(str)
     glazewm_connection_status = pyqtSignal(bool)
 
     def __init__(
@@ -154,6 +156,11 @@ class GlazewmClient(QObject):
         logger.debug("Connecting to %s", self._uri.toString())
         self._websocket.open(self._uri)
 
+    def close(self):
+        """Stops reconnection and closes the socket (used on shutdown/reload)."""
+        self._reconnect_timer.stop()
+        self._websocket.close()
+
     def _on_connected(self) -> None:
         logger.debug("Connected to %s", self._uri.toString())
         for message in self.initial_messages:
@@ -176,6 +183,15 @@ class GlazewmClient(QObject):
             response = json.loads(message)
         except json.JSONDecodeError:
             logger.warning("Received invalid JSON data.")
+            return
+
+        if response.get("messageType") == MessageType.HEAR_BROADCAST:
+            # A `hear` broadcast is an internally-tagged message, so its payload
+            # (`word`, `subscriptionId`) sits alongside `messageType` rather than
+            # nested under `data` like the query/event responses.
+            word = response.get("word")
+            if isinstance(word, str) and word:
+                self.hear_broadcast_processed.emit(word)
             return
 
         if response.get("messageType") == MessageType.EVENT_SUBSCRIPTION:

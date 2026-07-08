@@ -21,6 +21,9 @@ class GlazeWMConfig(CustomBaseModel):
     start_command: str | None = None
     stop_command: str | None = None
     reload_command: str | None = None
+    # WebSocket URI of the GlazeWM IPC server, used by the `hear` pseudo-key
+    # listener to receive `yasb-*` broadcast words.
+    server_uri: str = "ws://localhost:6123"
 
 
 class YasbConfig(CustomBaseModel):
