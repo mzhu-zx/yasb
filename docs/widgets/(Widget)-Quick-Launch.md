@@ -1,6 +1,6 @@
 # Quick Launch Widget
 
-The Quick Launch widget provides a Spotlight style search launcher accessible from the bar. It displays a centered popup where you can search for applications, perform calculations, convert currencies, search browser bookmarks, search the web, run system commands, open Windows Settings pages, kill processes, find files and more, all from a single unified search interface.
+The Quick Launch widget provides a Spotlight style search launcher accessible from the bar. It displays a centered popup where you can search for applications, perform calculations, search browser bookmarks, search the web, run system commands, open Windows Settings pages, kill processes, find files and more, all from a single unified search interface.
 
 ## Widget Options
 
@@ -50,18 +50,13 @@ Quick Launch uses a plugin-based provider system. Each provider handles a specif
 **Provider Index**
 
 - [Apps](#apps-provider)
-- [Binance](#binance-provider)
 - [Bookmarks](#bookmarks-provider)
 - [Calculator](#calculator-provider)
 - [Clipboard History](#clipboard-history-provider)
 - [Color](#color-provider)
-- [Currency](#currency-provider)
 - [Developer Tools](#developer-tools-provider)
 - [Emoji](#emoji-provider)
 - [File Search](#file-search-provider)
-- [GitHub Notifications](#github-notifications-provider)
-- [Hacker News](#hacker-news-provider)
-- [IP / Network Info](#ip--network-info-provider)
 - [Kill Process](#kill-process-provider)
 - [Port Viewer](#port-viewer-provider)
 - [Settings](#settings-provider)
@@ -88,30 +83,6 @@ Searches installed applications (Start Menu shortcuts). This is the default prov
 | `show_recent`      | bool   | `true`  | Show recently launched apps at the top.                                              |
 | `max_recent`       | int    | `10`    | Maximum number of recent apps to display.                                            |
 | `show_description` | bool   | `false` | Show a short description of the application.                                         |
-
-### Binance Provider
-
-Fetches live cryptocurrency prices from Binance and supports quick conversions between trading pairs.
-
-| Option     | Type   | Default               | Description                                                               |
-| ---------- | ------ | --------------------- | ------------------------------------------------------------------------- |
-| `enabled`  | bool   | `true`                | Enable/disable the Binance provider.                                      |
-| `prefix`   | string | `crypto`              | Trigger prefix. Use `"*"` to include in default results.                  |
-| `priority` | int    | `0`                   | Sort order when multiple providers share the same prefix. Lower values appear first. |
-| `pairs`    | list   | `["BTC/USDT"]`        | Default trading pairs to query when no specific pair is provided.(e.g. `["BTC/USDT", "ETH/USDT"]`)         |
-| `round`    | int    | `2`                   | Decimal precision for formatted output.                                   |
-| `open_url` | bool   | `false`               | Open the Binance trading page instead of only copying the result.         |
-| `domain`   | string | `api-gcp.binance.com` | Binance API domain.             |
-
-### Supported Queries
-
-- `btc` - Uses configured pairs
-- `eth usdt` or `eth/usdt` - Direct pair lookup
-- `5 btc usdt` or `5 btc to usdt` - Quantity conversion
-- `52.4k sol/eth` - Supports suffixes (`k`, `m`, `b`, `t`)
-
-> [!NOTE]
-> Endpoints using `*.binance.com` are not accessible from the United States. If you're operating within the U.S., use the corresponding `*.binance.us` endpoints instead.
 
 ### Bookmarks Provider
 
@@ -183,29 +154,6 @@ Accepted input formats:
 - Named colors: `coral`, `steelblue`, `crimson`, etc.
 
 Shows all nine representations (HEX, RGB, HSL, HSV, HWB, LAB, LCH, OKLAB, OKLCH). Press Enter on a result to copy the value.
-
-### Currency Provider
-
-Convert between currencies using ECB (European Central Bank) daily rates. Type `$` followed by an amount and currency codes (e.g., `$100 usd eur`, `$50 gbp jpy`). Rates are cached locally for 12 hours. Works offline using cached data.
-
-| Option     | Type   | Default | Description                                                                          |
-| ---------- | ------ | ------- | ------------------------------------------------------------------------------------ |
-| `enabled`  | bool   | `false` | Enable/disable the currency provider.                                                |
-| `prefix`   | string | `"$"`   | Trigger prefix. Use `"*"` to include in default results.                             |
-| `priority` | int    | `0`     | Sort order when multiple providers share the same prefix. Lower values appear first. |
-
-Input formats:
-
-- `$100 usd eur` - Convert 100 USD to EUR
-- `$50 gbp to jpy` - Convert 50 GBP to JPY (optional "to")
-- `$usd eur` - Show rate for 1 USD to EUR
-- `$usd` - Show 1 USD converted to common currencies
-- `$eur` - Show EUR rates overview
-
-Click a result to copy the converted value to the clipboard.
-
-> [!NOTE]
-> Currency rates are fetched from the ECB and cached for 12 hours. If there is no internet connection and no cached data, a "rates unavailable" message is shown. Stale cached rates are used as fallback when the network is unreachable.
 
 ### Developer Tools Provider
 
@@ -282,116 +230,6 @@ Search files and folders on the system. Type `/` followed by a filename (e.g., `
 
 > [!NOTE]
 > The `"disk"` backend only scans fixed local drives. Removable drives (USB), network drives, and CD/DVD drives are automatically skipped. System directories like `Windows`, `$Recycle.Bin`, `node_modules`, `.git`, and other common cache/build folders are also excluded for performance.
-
-### GitHub Notifications Provider
-
-Browse GitHub notifications directly from Quick Launch. Type `gh` to see your notifications grouped by unread/read status, sorted by most recent. Clicking a notification opens it in the browser and marks it as read. Uses the same GitHub API layer as the bar widget.
-
-| Option     | Type   | Default | Description                                                                          |
-| ---------- | ------ | ------- | ------------------------------------------------------------------------------------ |
-| `enabled`  | bool   | `false` | Enable/disable the GitHub Notifications provider.                                    |
-| `prefix`   | string | `"gh"`  | Trigger prefix. Use `"*"` to include in default results.                             |
-| `priority` | int    | `0`     | Sort order when multiple providers share the same prefix. Lower values appear first. |
-| `token`    | string | `"env"` | GitHub personal access token. Use `"env"` to read from the `YASB_GITHUB_TOKEN` environment variable, or paste the token directly. |
-
-**Usage examples:**
-
-- Type `gh` to fetch and list all notifications (fetches fresh data each time the popup opens).
-- Type `gh review` to filter notifications by title, repo, type, or reason.
-- Click a notification to open it in the browser and mark as read.
-- Right-click a notification for:
-  - **Copy URL** - copy the notification URL to clipboard.
-  - **Mark as read** - mark a single notification as read.
-  - **Mark all as read** - mark every notification as read.
-
-> [!NOTE]
-> The provider fetches fresh notifications every time the popup opens (no stale cache). If the same GitHub token is used for both the bar widget and this provider, the bar widget automatically refreshes when the provider fetches new data or marks notifications as read.
-
-**Authentication:**
-
-You can set a [Personal Access Token (classic)](https://github.com/settings/tokens) with the `notifications` scope in the `token` option, use `"env"` to read from the `YASB_GITHUB_TOKEN` environment variable, or leave it empty. When no token is configured, clicking the `gh` prefix result will open a sign-in dialog where you authorize with GitHub through your browser. The OAuth token is stored in `%LOCALAPPDATA%\YASB\github_token`.
-
-### Hacker News Provider
-
-Browse and search Hacker News stories directly from Quick Launch. Type `hn` to see available topics (Front Page, Newest, Best, Ask HN, Show HN, Jobs, Best Comments, Active), then click a topic to load stories. You can also type a keyword after a topic to filter (e.g., `hn newest rust`), or type any keyword directly to search all of HN (e.g., `hn python`).
-
-Clicking a story opens it in your default browser. Right-click a story to open the HN comments page or copy the URL.
-
-| Option      | Type   | Default | Description                                                                          |
-| ----------- | ------ | ------- | ------------------------------------------------------------------------------------ |
-| `enabled`   | bool   | `false` | Enable/disable the Hacker News provider.                                             |
-| `prefix`    | string | `"hn"`  | Trigger prefix to activate the provider.                                             |
-| `priority`  | int    | `0`     | Sort order when multiple providers share the same prefix. Lower values appear first. |
-| `cache_ttl` | int    | `300`   | How long (in seconds) to cache feed results before fetching again.                   |
-| `max_items` | int    | `30`    | Maximum number of stories to fetch per topic (hnrss.org limit is 100).               |
-
-**Available topics:**
-
-| Topic          | Description                                    |
-| -------------- | ---------------------------------------------- |
-| `frontpage`    | Top stories on the HN front page               |
-| `newest`       | Most recently submitted stories                |
-| `best`         | Highest-voted stories overall                  |
-| `ask`          | Ask HN posts and discussions                   |
-| `show`         | Show HN community projects and launches        |
-| `jobs`         | Job postings from YC companies                 |
-| `bestcomments` | Highly voted comments from across Hacker News  |
-| `active`       | Posts with the most active ongoing discussions |
-
-**Usage examples:**
-
-- `hn` - Show all topic tiles
-- `hn frontpage` - Load front page stories
-- `hn newest rust` - Search newest stories for "rust"
-- `hn python` - Search all of HN for "python"
-- `hn ask` - Browse Ask HN posts
-
-Each story result displays:
-
-- **Title:** The story title
-- **Description:** Points, comment count, author, and relative time (e.g., `42 points │ 15 comments │ by username │ 3h ago`)
-
-**Context menu actions:**
-
-- **Open HN comments** - Opens the Hacker News discussion page
-- **Copy URL** - Copies the story URL to clipboard
-
-> [!NOTE]
-> Hacker News provider uses [hnrss.org](https://hnrss.org) RSS feeds. Results are cached in memory and on disk to minimize network requests. No API key is required.
-
-### IP / Network Info Provider
-
-Provides local network interface details, public IP lookup, subnet calculator, IP analysis, DNS lookup, and MAC address listing. All operations except public IP are fully offline.
-
-| Option     | Type   | Default | Description                                    |
-| ---------- | ------ | ------- | ---------------------------------------------- |
-| `enabled`  | bool   | `false` | Enable/disable the IP / Network Info provider. |
-| `prefix`   | string | `"ip"`  | Prefix to activate the provider.               |
-| `priority` | int    | `0`     | Display priority (higher = shown first).       |
-
-**Available tools:**
-
-| Command  | Description                                        | Example                  |
-| -------- | -------------------------------------------------- | ------------------------ |
-| `info`   | Show local interfaces (IP, MAC, subnet mask)       | `ip info`                |
-| `public` | Fetch your external IP, ISP, location (online)     | `ip public`              |
-| `calc`   | Subnet calculator from CIDR notation               | `ip calc 192.168.1.0/24` |
-| `check`  | Analyze IP (type, class, binary, hex, reverse DNS) | `ip check 10.0.0.1`      |
-| `dns`    | Resolve hostname to IP addresses                   | `ip dns google.com`      |
-| `mac`    | List all adapter MAC addresses                     | `ip mac`                 |
-
-**Usage examples:**
-
-- Type `ip` to see all available tools as tiles
-- Type `ip info` to list all local network interfaces with IPv4, IPv6, MAC, and subnet mask
-- Type `ip public` to fetch your public IP with ISP, location, and timezone
-- Type `ip calc 10.0.0.0/16` to see network, broadcast, host range, total hosts
-- Type `ip check 172.16.5.1` to see type (Private), class (B), binary, hex representation
-- Type `ip dns github.com` to resolve IPv4 and IPv6 addresses
-- Type `ip mac` to list all adapter MAC addresses
-
-> [!NOTE]
-> Public IP uses [ip-api.com](http://ip-api.com)
 
 ### Kill Process Provider
 
@@ -674,13 +512,9 @@ Prefixes are configurable per provider. Set `prefix` to `"*"` to include a provi
 | `=`    | Calculator           | `=2*pi`            |
 | `cb`   | Clipboard History    | `cb notepad`       |
 | `c:`   | Color                | `c:#FF5500`        |
-| `$`    | Currency             | `$100 usd eur`     |
 | `dev`  | Developer Tools      | `dev uuid`         |
 | `:`    | Emoji                | `:fire`            |
 | `/`    | File Search          | `/report.docx`     |
-| `gh`   | GitHub Notifications | `gh review`        |
-| `hn`   | Hacker News          | `hn frontpage`     |
-| `ip`   | IP / Network Info    | `ip info`          |
 | `!`    | Kill Process         | `!chrome`          |
 | `pv`   | Port Viewer          | `pv 80`            |
 | `@`    | Settings             | `@wifi`            |
@@ -760,10 +594,6 @@ quick_launch:
         enabled: true
         prefix: "c:"
         priority: 4
-      currency:
-        enabled: true
-        prefix: "$"
-        priority: 5
       dev_tools:
         enabled: true
         prefix: "dev"
@@ -778,21 +608,6 @@ quick_launch:
         priority: 8
         backend: "auto"
         show_path: true
-      github_notifications:
-        enabled: true
-        prefix: "gh"
-        priority: 9
-        token: "env"
-      hacker_news:
-        enabled: true
-        prefix: "hn"
-        priority: 10
-        cache_ttl: 300
-        max_items: 30
-      ip_info:
-        enabled: true
-        prefix: "ip"
-        priority: 11
       kill_process:
         enabled: true
         prefix: "!"
@@ -875,13 +690,9 @@ quick_launch:
     - **_calculator:_** Inline math evaluation with prefix `=`.
     - **_clipboard_history:_** Browse and restore Windows Clipboard History entries (text, rich text, images). Use `max_items` to limit how many entries are shown.
     - **_color:_** Pick colors from screen and convert between HEX, RGB, HSL, HSV, HWB, LAB, LCH, OKLAB, OKLCH with prefix `c:`.
-    - **_currency:_** Currency conversion using ECB daily rates with prefix `$`. Rates cached for 12 hours.
     - **_dev_tools:_** Common developer utilities (UUID, hash, base64, JWT, lorem, timestamps, passwords) with prefix `dev`.
     - **_emoji:_** Search and copy emojis to clipboard with prefix `:`.
     - **_file_search:_** File and folder search with prefix `/`. Uses Everything SDK, Windows Search indexer, or full disk scan.
-    - **_github_notifications:_** Browse GitHub notifications with prefix `gh`. Requires a personal access token.
-    - **_hacker_news:_** Browse and search Hacker News stories with prefix `hn`. Supports topic browsing and keyword search.
-    - **_ip_info:_** Local network info, public IP, subnet calculator, DNS lookup with prefix `ip`.
     - **_kill_process:_** Process search and termination with prefix `!`.
     - **_port_viewer:_** View TCP/UDP ports and the owning PID/process name (via `netstat`). Supports filtering and kill actions.
     - **_settings:_** Quick access to Windows Settings pages with prefix `@`.

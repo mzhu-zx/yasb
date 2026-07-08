@@ -47,7 +47,6 @@ class GlazewmWorkspaceButton(QPushButton):
         self.config = config
         self.workspace_name = workspace_name
         self.display_name = display_name
-        self.full_name = f"{workspace_name}:{display_name}" if display_name else workspace_name
         self.monitor_exclusive = config.monitor_exclusive
         self.is_displayed = False
         self.is_focused = False
@@ -56,6 +55,9 @@ class GlazewmWorkspaceButton(QPushButton):
         self.clicked.connect(self._activate_workspace)  # type: ignore
         self.setSizePolicy(QSizePolicy.Policy.Fixed, self.sizePolicy().verticalPolicy())
         self._update_status()
+
+    def _full_name(self) -> str: 
+        return f"{self.workspace_name}:{self.display_name}" if self.display_name else self.workspace_name
 
     def update_button(self):
         self._update_status()
@@ -88,19 +90,19 @@ class GlazewmWorkspaceButton(QPushButton):
         replacements = {
             "name": str(self.workspace_name or ""),
             "display_name": str(self.display_name or ""),
-            "full_name": str(self.full_name or ""),
+            "full_name": str(self._full_name()),
         }
         # Label priority: YASB config -> synthesized full_name from GlazeWM -> name from GlazeWM
-        populated_label = self.config.populated_label or self.full_name or self.workspace_name
-        empty_label = self.config.empty_label or self.full_name or self.workspace_name
-        active_populated_label = self.config.active_populated_label or self.full_name or self.workspace_name
-        active_empty_label = self.config.active_empty_label or self.full_name or self.workspace_name
+        populated_label = self.config.populated_label or self._full_name() or self.workspace_name
+        empty_label = self.config.empty_label or self._full_name() or self.workspace_name
+        active_populated_label = self.config.active_populated_label or self._full_name() or self.workspace_name
+        active_empty_label = self.config.active_empty_label or self._full_name() or self.workspace_name
         # have focused_ label variants fall back to equivalent active_ label variants if they are set (preserves previous functionality)
         focused_populated_label = (
-            self.config.focused_populated_label or active_populated_label or self.full_name or self.workspace_name
+            self.config.focused_populated_label or active_populated_label or self._full_name() or self.workspace_name
         )
         focused_empty_label = (
-            self.config.focused_empty_label or active_empty_label or self.full_name or self.workspace_name
+            self.config.focused_empty_label or active_empty_label or self._full_name() or self.workspace_name
         )
         # Replace placeholders if any exist
         populated_label = populated_label.format_map(replacements)
@@ -145,7 +147,6 @@ class GlazewmWorkspaceButtonWithIcons(QFrame):
         self.glazewm_client = client
         self.workspace_name = workspace_name
         self.display_name = display_name
-        self.full_name = f"{workspace_name}:{display_name}" if display_name else workspace_name
         self.parent_widget = parent_widget
         self.config = config
         self.monitor_exclusive = config.monitor_exclusive
@@ -170,6 +171,9 @@ class GlazewmWorkspaceButtonWithIcons(QFrame):
         self.icon_labels = []
         self.update_button()
 
+    def _full_name(self) -> str: 
+        return f"{self.workspace_name}:{self.display_name}" if self.display_name else self.workspace_name
+
     def update_button(self):
         self._update_status()
         self._update_label()
@@ -191,19 +195,19 @@ class GlazewmWorkspaceButtonWithIcons(QFrame):
         replacements = {
             "name": str(self.workspace_name or ""),
             "display_name": str(self.display_name or ""),
-            "full_name": str(self.full_name or ""),
+            "full_name": str(self._full_name() or ""),
         }
 
-        populated_label = self.config.populated_label or self.full_name or self.workspace_name
-        empty_label = self.config.empty_label or self.full_name or self.workspace_name
-        active_populated_label = self.config.active_populated_label or self.full_name or self.workspace_name
-        active_empty_label = self.config.active_empty_label or self.full_name or self.workspace_name
+        populated_label = self.config.populated_label or self._full_name() or self.workspace_name
+        empty_label = self.config.empty_label or self._full_name() or self.workspace_name
+        active_populated_label = self.config.active_populated_label or self._full_name() or self.workspace_name
+        active_empty_label = self.config.active_empty_label or self._full_name() or self.workspace_name
         # have focused_ label variants fall back to equivalent active_ label variants if they are set (preserves previous functionality)
         focused_populated_label = (
-            self.config.focused_populated_label or active_populated_label or self.full_name or self.workspace_name
+            self.config.focused_populated_label or active_populated_label or self._full_name() or self.workspace_name
         )
         focused_empty_label = (
-            self.config.focused_empty_label or active_empty_label or self.full_name or self.workspace_name
+            self.config.focused_empty_label or active_empty_label or self._full_name() or self.workspace_name
         )
         # Replace placeholders if any exist
         populated_label = populated_label.format_map(replacements)

@@ -84,22 +84,6 @@ class FileSearchProviderConfig(CustomBaseModel):
     show_preview: bool = False
 
 
-class BinanceProviderConfig(CustomBaseModel):
-    enabled: bool = False
-    prefix: str = "crypto"
-    priority: int = 0
-    pairs: list[str] = ["BTC/USDT"]
-    round: int = 2
-    open_url: bool = False
-    domain: str = "api-gcp.binance.com"
-
-
-class CurrencyProviderConfig(CustomBaseModel):
-    enabled: bool = False
-    prefix: str = "$"
-    priority: int = 0
-
-
 class BookmarksProviderConfig(CustomBaseModel):
     enabled: bool = False
     prefix: str = "*"
@@ -149,29 +133,21 @@ class PortViewerProviderConfig(CustomBaseModel):
     include_established: bool = False
 
 
+class RunCommandProviderConfig(CustomBaseModel):
+    enabled: bool = False
+    prefix: str = "$"
+    priority: int = 0
+
+
 class WorldClockProviderConfig(CustomBaseModel):
     enabled: bool = False
     prefix: str = "tz"
     priority: int = 0
 
 
-class HackerNewsProviderConfig(CustomBaseModel):
-    enabled: bool = False
-    prefix: str = "hn"
-    priority: int = 0
-    cache_ttl: int = 300
-    max_items: int = 30
-
-
 class DevToolsProviderConfig(CustomBaseModel):
     enabled: bool = False
     prefix: str = "dev"
-    priority: int = 0
-
-
-class IpInfoProviderConfig(CustomBaseModel):
-    enabled: bool = False
-    prefix: str = "ip"
     priority: int = 0
 
 
@@ -194,13 +170,6 @@ class WindowsTerminalProviderConfig(CustomBaseModel):
     priority: int = 0
 
 
-class GithubNotificationsProviderConfig(CustomBaseModel):
-    enabled: bool = False
-    prefix: str = "gh"
-    priority: int = 0
-    token: str = "env"
-
-
 class WslProviderConfig(CustomBaseModel):
     enabled: bool = False
     prefix: str = "wsl"
@@ -221,16 +190,12 @@ class QuickLaunchProvidersConfig(CustomBaseModel):
     calculator: CalculatorProviderConfig = CalculatorProviderConfig()
     clipboard_history: ClipboardHistoryProviderConfig = ClipboardHistoryProviderConfig()
     color: ColorProviderConfig = ColorProviderConfig()
-    binance: BinanceProviderConfig = BinanceProviderConfig()
-    currency: CurrencyProviderConfig = CurrencyProviderConfig()
     dev_tools: DevToolsProviderConfig = DevToolsProviderConfig()
     emoji: EmojiProviderConfig = EmojiProviderConfig()
     file_search: FileSearchProviderConfig = FileSearchProviderConfig()
-    github_notifications: GithubNotificationsProviderConfig = GithubNotificationsProviderConfig()
-    hacker_news: HackerNewsProviderConfig = HackerNewsProviderConfig()
-    ip_info: IpInfoProviderConfig = IpInfoProviderConfig()
     kill_process: KillProcessProviderConfig = KillProcessProviderConfig()
     port_viewer: PortViewerProviderConfig = PortViewerProviderConfig()
+    run_command: RunCommandProviderConfig = RunCommandProviderConfig()
     settings: SettingsProviderConfig = SettingsProviderConfig()
     snippets: SnippetsProviderConfig = SnippetsProviderConfig()
     ssh: SshProviderConfig = SshProviderConfig()

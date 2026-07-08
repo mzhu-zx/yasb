@@ -836,53 +836,6 @@
       "title": "BatteryEntry",
       "type": "object"
     },
-    "BinanceProviderConfig": {
-      "additionalProperties": false,
-      "properties": {
-        "enabled": {
-          "default": false,
-          "title": "Enabled",
-          "type": "boolean"
-        },
-        "prefix": {
-          "default": "crypto",
-          "title": "Prefix",
-          "type": "string"
-        },
-        "priority": {
-          "default": 0,
-          "title": "Priority",
-          "type": "integer"
-        },
-        "pairs": {
-          "default": [
-            "BTC/USDT"
-          ],
-          "items": {
-            "type": "string"
-          },
-          "title": "Pairs",
-          "type": "array"
-        },
-        "round": {
-          "default": 2,
-          "title": "Round",
-          "type": "integer"
-        },
-        "open_url": {
-          "default": false,
-          "title": "Open Url",
-          "type": "boolean"
-        },
-        "domain": {
-          "default": "api-gcp.binance.com",
-          "title": "Domain",
-          "type": "string"
-        }
-      },
-      "title": "BinanceProviderConfig",
-      "type": "object"
-    },
     "BluetoothCallbacksConfig": {
       "additionalProperties": false,
       "properties": {
@@ -2859,28 +2812,6 @@
       "title": "CpuThresholdsConfig",
       "type": "object"
     },
-    "CurrencyProviderConfig": {
-      "additionalProperties": false,
-      "properties": {
-        "enabled": {
-          "default": false,
-          "title": "Enabled",
-          "type": "boolean"
-        },
-        "prefix": {
-          "default": "$",
-          "title": "Prefix",
-          "type": "string"
-        },
-        "priority": {
-          "default": 0,
-          "title": "Priority",
-          "type": "integer"
-        }
-      },
-      "title": "CurrencyProviderConfig",
-      "type": "object"
-    },
     "CustomCallbacksConfig": {
       "additionalProperties": false,
       "properties": {
@@ -3890,33 +3821,6 @@
       "title": "GithubMenuConfig",
       "type": "object"
     },
-    "GithubNotificationsProviderConfig": {
-      "additionalProperties": false,
-      "properties": {
-        "enabled": {
-          "default": false,
-          "title": "Enabled",
-          "type": "boolean"
-        },
-        "prefix": {
-          "default": "gh",
-          "title": "Prefix",
-          "type": "string"
-        },
-        "priority": {
-          "default": 0,
-          "title": "Priority",
-          "type": "integer"
-        },
-        "token": {
-          "default": "env",
-          "title": "Token",
-          "type": "string"
-        }
-      },
-      "title": "GithubNotificationsProviderConfig",
-      "type": "object"
-    },
     "GlazeWMConfig": {
       "additionalProperties": false,
       "properties": {
@@ -4856,38 +4760,6 @@
       "title": "GrouperWidgetEntry",
       "type": "object"
     },
-    "HackerNewsProviderConfig": {
-      "additionalProperties": false,
-      "properties": {
-        "enabled": {
-          "default": false,
-          "title": "Enabled",
-          "type": "boolean"
-        },
-        "prefix": {
-          "default": "hn",
-          "title": "Prefix",
-          "type": "string"
-        },
-        "priority": {
-          "default": 0,
-          "title": "Priority",
-          "type": "integer"
-        },
-        "cache_ttl": {
-          "default": 300,
-          "title": "Cache Ttl",
-          "type": "integer"
-        },
-        "max_items": {
-          "default": 30,
-          "title": "Max Items",
-          "type": "integer"
-        }
-      },
-      "title": "HackerNewsProviderConfig",
-      "type": "object"
-    },
     "HomeConfig": {
       "additionalProperties": false,
       "properties": {
@@ -5073,28 +4945,6 @@
         }
       },
       "title": "IgnoreWindowConfig",
-      "type": "object"
-    },
-    "IpInfoProviderConfig": {
-      "additionalProperties": false,
-      "properties": {
-        "enabled": {
-          "default": false,
-          "title": "Enabled",
-          "type": "boolean"
-        },
-        "prefix": {
-          "default": "ip",
-          "title": "Prefix",
-          "type": "string"
-        },
-        "priority": {
-          "default": 0,
-          "title": "Priority",
-          "type": "integer"
-        }
-      },
-      "title": "IpInfoProviderConfig",
       "type": "object"
     },
     "KeybindingConfig": {
@@ -8330,22 +8180,6 @@
               "prefix": "c:",
               "priority": 0
             },
-            "binance": {
-              "domain": "api-gcp.binance.com",
-              "enabled": false,
-              "open_url": false,
-              "pairs": [
-                "BTC/USDT"
-              ],
-              "prefix": "crypto",
-              "priority": 0,
-              "round": 2
-            },
-            "currency": {
-              "enabled": false,
-              "prefix": "$",
-              "priority": 0
-            },
             "dev_tools": {
               "enabled": false,
               "prefix": "dev",
@@ -8363,24 +8197,6 @@
               "priority": 0,
               "show_path": true,
               "show_preview": false
-            },
-            "github_notifications": {
-              "enabled": false,
-              "prefix": "gh",
-              "priority": 0,
-              "token": "env"
-            },
-            "hacker_news": {
-              "cache_ttl": 300,
-              "enabled": false,
-              "max_items": 30,
-              "prefix": "hn",
-              "priority": 0
-            },
-            "ip_info": {
-              "enabled": false,
-              "prefix": "ip",
-              "priority": 0
             },
             "kill_process": {
               "enabled": false,
@@ -8600,28 +8416,6 @@
             "priority": 0
           }
         },
-        "binance": {
-          "$ref": "#/$defs/BinanceProviderConfig",
-          "default": {
-            "enabled": false,
-            "prefix": "crypto",
-            "priority": 0,
-            "pairs": [
-              "BTC/USDT"
-            ],
-            "round": 2,
-            "open_url": false,
-            "domain": "api-gcp.binance.com"
-          }
-        },
-        "currency": {
-          "$ref": "#/$defs/CurrencyProviderConfig",
-          "default": {
-            "enabled": false,
-            "prefix": "$",
-            "priority": 0
-          }
-        },
         "dev_tools": {
           "$ref": "#/$defs/DevToolsProviderConfig",
           "default": {
@@ -8647,33 +8441,6 @@
             "backend": "auto",
             "show_path": true,
             "show_preview": false
-          }
-        },
-        "github_notifications": {
-          "$ref": "#/$defs/GithubNotificationsProviderConfig",
-          "default": {
-            "enabled": false,
-            "prefix": "gh",
-            "priority": 0,
-            "token": "env"
-          }
-        },
-        "hacker_news": {
-          "$ref": "#/$defs/HackerNewsProviderConfig",
-          "default": {
-            "enabled": false,
-            "prefix": "hn",
-            "priority": 0,
-            "cache_ttl": 300,
-            "max_items": 30
-          }
-        },
-        "ip_info": {
-          "$ref": "#/$defs/IpInfoProviderConfig",
-          "default": {
-            "enabled": false,
-            "prefix": "ip",
-            "priority": 0
           }
         },
         "kill_process": {
